@@ -1,7 +1,6 @@
-<Query Kind="Expression">
+<Query Kind="Statements">
   <Connection>
     <ID>d7510688-cd5b-4e85-a3f6-ca2ed6b5513c</ID>
-    <Persist>true</Persist>
     <Server>.</Server>
     <Database>Chinook</Database>
   </Connection>
@@ -40,12 +39,56 @@ select new
 		, averageTrackLengthSecNoD = a.Tracks.Average(c => c.Milliseconds/1000)
 	}
 
-//Media TYpe With ost tracks
-from a in MediaTypes
-where a.Tracks.Count() > 0
-select new
-	{
-		  MediaType = a.Name
-		, Count = a.Tracks.Count().Max()
-	}
+//When you need to use mulitple steps to solve a problem.
+//switch your language choice to either: -Statement(s) or -Program
+//the results from each query will now be saved in a variable
+//the var can then be used in future querries
+//Media Type With ost tracks
 
+var maxcount = (from x in MediaTypes
+				select x.Tracks.Count()).Max();
+				
+//To display the contents of a var in linqpad
+//Use the method .Dump()
+
+maxcount.Dump();
+
+//use a value from a preceeding variable
+var popMediaType =  from x in MediaTypes
+					where x.Tracks.Count() == maxcount
+					select new{
+						   	  Type = x.Name
+							, TCount = x.Tracks.Count()
+							};
+								
+popMediaType.Dump();
+
+//Can this set of statements be done as one complete query.
+//The answer is possibly, in this case yes.
+//In this Example maxcount could be exchanged for the query
+//	that actually create the value in the first place
+//	this subsituted quwey is a subquery.
+var popMediaTypeSubQ =  from a in MediaTypes
+					where a.Tracks.Count() == 
+						( (from b in MediaTypes
+						 select b.Tracks.Count()).Max() )
+					select new{
+						   	  Type = a.Name
+							, TCount = a.Tracks.Count()
+							};
+								
+popMediaTypeSubQ.Dump();
+
+
+
+//using the method syntax to determine the count calue for the where expression
+//this demonstrates that quweiws can be constructed using both query syntax and method syntax
+var popMediaTypeSubMethod =  from a in MediaTypes
+							 where a.Tracks.Count() ==
+								MediaTypes.Select (mt => mt.Tracks.Count()).Max()
+							 select new{
+									Type = a.Name
+									, TCount = a.Tracks.Count()
+									};
+								
+popMediaTypeSubMethod.Dump();
