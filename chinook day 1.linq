@@ -1,4 +1,4 @@
-<Query Kind="Statements">
+<Query Kind="Expression">
   <Connection>
     <ID>d7510688-cd5b-4e85-a3f6-ca2ed6b5513c</ID>
     <Server>.</Server>
@@ -36,7 +36,7 @@ select new
 		, numTracks = a.Tracks.Count()
 		, priceOfAlbum = "$" + a.Tracks.Sum(b => b.UnitPrice)
 		, averageTrackLengthSec = a.Tracks.Average(c => c.Milliseconds) / 1000
-		, averageTrackLengthSecNoD = a.Tracks.Average(c => c.Milliseconds/1000)
+		, averageTrackLengthSecNoD = a.Tracks.Average(c => c.Milliseconds / 1000)
 	}
 
 //When you need to use mulitple steps to solve a problem.
@@ -92,3 +92,32 @@ var popMediaTypeSubMethod =  from a in MediaTypes
 									};
 								
 popMediaTypeSubMethod.Dump();
+
+//union demo
+//(
+//	from a in Albums
+//	orderby a.Title
+//	where a.Tracks.Count() > 0
+//	select new
+//		{
+//			Titles = a.Title
+//			, numTracks = a.Tracks.Count()
+//			, priceOfAlbum = "$" + a.Tracks.Sum(b => b.UnitPrice)
+//			, averageTrackLengthSec = a.Tracks.Average(c => c.Milliseconds) / 1000
+//			, averageTrackLengthSecNoD = a.Tracks.Average(c => c.Milliseconds / 1000)
+//		}
+//)
+//.Union
+//(
+//	from b in Albums
+//	orderby b.Title
+//	where b.Tracks.Count() > 0
+//	select new
+//		{
+//			Titles = b.Title
+//			, numTracks = 0
+//			, priceOfAlbum = 0.00m
+//			, averageTrackLengthSec = 0.00m
+//			, averageTrackLengthSecNoD = 0
+//		}
+//)
