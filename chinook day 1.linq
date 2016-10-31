@@ -1,4 +1,4 @@
-<Query Kind="Expression">
+<Query Kind="Statements">
   <Connection>
     <ID>d7510688-cd5b-4e85-a3f6-ca2ed6b5513c</ID>
     <Server>.</Server>
